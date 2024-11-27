@@ -124,7 +124,7 @@
 | **constructors_df**       | `constructorId`, `constructorRef`, `name`, `nationality`, `url`                                                                                                                |
 | **driver_standings_df**   | `driverStandingsId`, `raceId`, `driverId`, `points`, `position`, `positionText`, `wins`                                                                                        |
 
-#### Loading of Libraries.
+### Loading of Libraries.
 
 1. **Importing Libraries:**
 
