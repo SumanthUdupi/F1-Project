@@ -124,7 +124,7 @@
 | **constructors_df**       | `constructorId`, `constructorRef`, `name`, `nationality`, `url`                                                                                                                |
 | **driver_standings_df**   | `driverStandingsId`, `raceId`, `driverId`, `points`, `position`, `positionText`, `wins`                                                                                        |
 
-#### Loading of Data and Libraries.
+#### Loading of Libraries.
 
 1. **Importing Libraries:**
 
@@ -159,3 +159,20 @@
    print("NumPy version:", np.__version__)
 
 These lines display the versions of each library in use, which helps in keeping track of the exact setup, since different versions might have small differences in functionality.
+
+### Loading of Data.
+
+1. **Creating a Dictionary of DataFrames**:
+   - A dictionary called `dataframes` is created, where each key-value pair represents a table name and its corresponding DataFrame. This setup makes it easy to iterate over multiple tables.
+
+2. **Looping to Display Shapes and Sample Rows**:
+   - The first loop iterates over each DataFrame in the dictionary, printing:
+     - The name of the DataFrame.
+     - The shape of the DataFrame, which shows the number of rows and columns.
+     - The first few rows of data using `head()`, giving a sample preview of the data.
+
+3. **Looping to Display Column Names**:
+   - The second loop iterates over each DataFrame again to print:
+     - The name of each table.
+     - A list of the column names in each DataFrame.
+     - This part is helpful for understanding the structure of each table and identifying available fields for analysis or further processing.
