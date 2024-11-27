@@ -183,15 +183,15 @@ These lines display the versions of each library in use, which helps in keeping 
 
 ### Algebra Exercises
 
-1. **Filter and Analyze Circuit Locations**
+1. **Filter and Analyze Circuit Locations.**
    - **Goal**: Identify all unique `location` and `country` pairs in the `circuits_df` table and create a table where each `country` has a count of `circuits` it contains.
    - **Hint**: Use grouping to count occurrences and display results.
    
-   **_Solution_**: Analyzing Unique Location-Country Pairs and Circuit Counts
+   **_Solution :_**: Analyzing Unique Location-Country Pairs and Circuit Counts
 
       This code looks at the `circuits_df` DataFrame to find unique locations and countries, as well as how many circuits each country has.
       
-   **_Steps_**
+   **_Steps :_**
 
    1. **Find Unique Location-Country Pairs**:
       - The code gets unique combinations of `location` and `country` from the `circuits_df` DataFrame. This helps us see where circuits are located without duplicates.
