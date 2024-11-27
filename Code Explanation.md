@@ -103,7 +103,7 @@
 - Cloud platforms: AWS, GCP, Azure for model deployment.
 - Monitoring models: Performance tracking, retraining triggers.
 ---
-### Loading of Data, Libraries and Table.
+### Loading of Table, Libraries and Data.
 
 #### List of tables and columns.
 
