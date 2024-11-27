@@ -187,35 +187,35 @@ These lines display the versions of each library in use, which helps in keeping 
    - **Goal**: Identify all unique `location` and `country` pairs in the `circuits_df` table and create a table where each `country` has a count of `circuits` it contains.
    - **Hint**: Use grouping to count occurrences and display results.
    
-**_Solution_**: Analyzing Unique Location-Country Pairs and Circuit Counts
+   **_Solution_**: Analyzing Unique Location-Country Pairs and Circuit Counts
 
-   This code looks at the `circuits_df` DataFrame to find unique locations and countries, as well as how many circuits each country has.
-   
-**_Steps_**
+      This code looks at the `circuits_df` DataFrame to find unique locations and countries, as well as how many circuits each country has.
+      
+   **_Steps_**
 
-1. **Find Unique Location-Country Pairs**:
-   - The code gets unique combinations of `location` and `country` from the `circuits_df` DataFrame. This helps us see where circuits are located without duplicates.
+   1. **Find Unique Location-Country Pairs**:
+      - The code gets unique combinations of `location` and `country` from the `circuits_df` DataFrame. This helps us see where circuits are located without duplicates.
 
-    ```python
-    unique_location_country_pairs = circuits_df[['location', 'country']].drop_duplicates()
-    ```
-2. **Print Unique Pairs**:
-   - It then prints these unique location-country pairs to show the different circuits.
+      ```python
+      unique_location_country_pairs = circuits_df[['location', 'country']].drop_duplicates()
+      ```
+   2. **Print Unique Pairs**:
+      - It then prints these unique location-country pairs to show the different circuits.
 
-    ```python
-    print("Unique location-country pairs:")
-    print(unique_location_country_pairs)
-    ```
-3. **Count Circuits per Country**:
-    - The code groups the data by country and counts the number of unique circuits in each country. This tells us how many circuits each country has.
+      ```python
+      print("Unique location-country pairs:")
+      print(unique_location_country_pairs)
+      ```
+   3. **Count Circuits per Country**:
+      - The code groups the data by country and counts the number of unique circuits in each country. This tells us how many circuits each country has.
 
-    ```python
-    country_circuit_count = circuits_df.groupby('country')['circuitId'].nunique().reset_index(name='circuit_count')
-    ```
-4. **Print Circuit Count**:
-    - Finally, it prints the count of circuits for each country.
+      ```python
+      country_circuit_count = circuits_df.groupby('country')['circuitId'].nunique().reset_index(name='circuit_count')
+      ```
+   4. **Print Circuit Count**:
+      - Finally, it prints the count of circuits for each country.
 
-    ```python
-    print("Circuit count per country:")
-    print(country_circuit_count)
-    ```
+      ```python
+      print("Circuit count per country:")
+      print(country_circuit_count)
+      ```
