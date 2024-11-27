@@ -198,24 +198,72 @@ These lines display the versions of each library in use, which helps in keeping 
 
       ```python
       unique_location_country_pairs = circuits_df[['location', 'country']].drop_duplicates()
-      ```
+      
    2. **Print Unique Pairs**:
       - It then prints these unique location-country pairs to show the different circuits.
 
       ```python
       print("Unique location-country pairs:")
       print(unique_location_country_pairs)
-      ```
+      
    3. **Count Circuits per Country**:
       - The code groups the data by country and counts the number of unique circuits in each country. This tells us how many circuits each country has.
 
       ```python
       country_circuit_count = circuits_df.groupby('country')['circuitId'].nunique().reset_index(name='circuit_count')
-      ```
+      
    4. **Print Circuit Count**:
       - Finally, it prints the count of circuits for each country.
 
       ```python
       print("Circuit count per country:")
       print(country_circuit_count)
-      ```
+      
+2. **Matrix of Constructor Standings**
+   - **Goal**: Create a matrix showing the `position` of constructors across multiple `races`. Each row represents a `raceId` and each column represents a `constructorId` from the `constructor_standings_df` table.
+   - **Hint**: Use pivoting or matrix transformation functions to reshape data.
+
+   **_Solution:_** Creating a Constructor Position Matrix
+
+      This code builds a matrix showing the positions of constructors across multiple races. Each row represents a race (`raceId`), and each column represents a constructor (`name`).
+
+   **_Steps :_**
+
+   1. **Merge Constructor Data**:
+      - The `constructor_standings_df` is merged with the `constructors_df` to replace `constructorId` with the constructor's name.
+      - This makes the data more understandable by using names instead of numeric IDs.
+
+      ```python
+      merged_df = constructor_standings_df.merge(
+         constructors_df[['constructorId', 'name']],
+         on='constructorId',
+         how='left'
+      )
+      
+   2. **Create the Matrix**:
+
+   - The data is pivoted into a matrix where:
+      - Rows (index) represent raceId (the race).
+      - Columns (columns) represent name (constructor name).
+      - Values (values) represent the position of each constructor in the respective race.
+      
+      ```python
+      constructor_position_matrix = merged_df.pivot(
+         index='raceId',  
+         columns='name',  
+         values='position'
+      )
+
+   3. **Handle Missing Values**:
+
+   - Missing positions (where a constructor did not participate in a race) are filled with `"N/A"` for clarity.
+
+      ```python
+      constructor_position_matrix.fillna("N/A", inplace=True)
+
+   4. **Print the Matrix**:
+   The final matrix is printed to display the constructor positions across races.
+
+      ```python
+      print("Constructor Position Matrix (Rows: raceId, Columns: Constructor Name):")
+      print(constructor_position_matrix)
