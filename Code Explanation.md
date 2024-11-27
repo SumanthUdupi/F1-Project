@@ -187,7 +187,7 @@ These lines display the versions of each library in use, which helps in keeping 
    - **Goal**: Identify all unique `location` and `country` pairs in the `circuits_df` table and create a table where each `country` has a count of `circuits` it contains.
    - **Hint**: Use grouping to count occurrences and display results.
    
-   **_Solution :_**: Analyzing Unique Location-Country Pairs and Circuit Counts
+   **_Solution :_** Analyzing Unique Location-Country Pairs and Circuit Counts
 
       This code looks at the `circuits_df` DataFrame to find unique locations and countries, as well as how many circuits each country has.
       
