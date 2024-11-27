@@ -182,7 +182,7 @@ These lines display the versions of each library in use, which helps in keeping 
 ## 1. Mathematics for Data Science
 
 ### Algebra Exercises
-
+---
 1. **Filter and Analyze Circuit Locations.**
    - **Goal**: Identify all unique `location` and `country` pairs in the `circuits_df` table and create a table where each `country` has a count of `circuits` it contains.
    - **Hint**: Use grouping to count occurrences and display results.
@@ -218,7 +218,7 @@ These lines display the versions of each library in use, which helps in keeping 
       ```python
       print("Circuit count per country:")
       print(country_circuit_count)
-      
+---      
 2. **Matrix of Constructor Standings**
    - **Goal**: Create a matrix showing the `position` of constructors across multiple `races`. Each row represents a `raceId` and each column represents a `constructorId` from the `constructor_standings_df` table.
    - **Hint**: Use pivoting or matrix transformation functions to reshape data.
@@ -267,3 +267,4 @@ These lines display the versions of each library in use, which helps in keeping 
       ```python
       print("Constructor Position Matrix (Rows: raceId, Columns: Constructor Name):")
       print(constructor_position_matrix)
+---
