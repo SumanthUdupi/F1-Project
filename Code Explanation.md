@@ -103,3 +103,59 @@
 - Cloud platforms: AWS, GCP, Azure for model deployment.
 - Monitoring models: Performance tracking, retraining triggers.
 ---
+### Loading of Data, Libraries and Table.
+
+#### List of tables and columns.
+
+| Table                     | Columns                                                                                                                                                                        |
+|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **circuits_df**           | `circuitId`, `circuitRef`, `name`, `location`, `country`, `lat`, `lng`, `alt`, `url`                                                                                           |
+| **constructor_results_df** | `constructorResultsId`, `raceId`, `constructorId`, `points`, `status`                                                                                                          |
+| **constructor_standings_df** | `constructorStandingsId`, `raceId`, `constructorId`, `points`, `position`, `positionText`, `wins`                                                                        |
+| **lap_times_df**          | `raceId`, `driverId`, `lap`, `position`, `time`, `milliseconds`                                                                                                                |
+| **pit_stops_df**          | `raceId`, `driverId`, `stop`, `lap`, `time`, `duration`, `milliseconds`                                                                                                        |
+| **qualifying_df**         | `qualifyId`, `raceId`, `driverId`, `constructorId`, `number`, `position`, `q1`, `q2`, `q3`                                                                                     |
+| **results_df**            | `resultId`, `raceId`, `driverId`, `constructorId`, `number`, `grid`, `position`, `positionText`, `positionOrder`, `points`, `laps`, `time`, `milliseconds`, `fastestLap`, `rank`, `fastestLapTime`, `fastestLapSpeed`, `statusId` |
+| **seasons_df**            | `year`, `url`                                                                                                                                                                  |
+| **sprint_results_df**     | `resultId`, `raceId`, `driverId`, `constructorId`, `number`, `grid`, `position`, `positionText`, `positionOrder`, `points`, `laps`, `time`, `milliseconds`, `fastestLap`, `fastestLapTime`, `statusId` |
+| **status_df**             | `statusId`, `status`                                                                                                                                                           |
+| **drivers_df**            | `driverId`, `driverRef`, `number`, `code`, `forename`, `surname`, `dob`, `nationality`, `url`                                                                                  |
+| **races_df**              | `raceId`, `year`, `round`, `circuitId`, `name`, `date`, `time`, `url`, `fp1_date`, `fp1_time`, `fp2_date`, `fp2_time`, `fp3_date`, `fp3_time`, `quali_date`, `quali_time`, `sprint_date`, `sprint_time` |
+| **constructors_df**       | `constructorId`, `constructorRef`, `name`, `nationality`, `url`                                                                                                                |
+| **driver_standings_df**   | `driverStandingsId`, `raceId`, `driverId`, `points`, `position`, `positionText`, `wins`                                                                                        |
+
+#### Loading of Data and Libraries.
+
+1. **Importing Libraries:**
+
+  -   **Pandas** (`import pandas as pd`):  
+  Pandas is like an advanced spreadsheet tool that allows us to load, manipulate, and analyze large sets of data quickly.
+
+  -   **Seaborn** (`import seaborn as sns`):  
+  Seaborn is a tool for making nice-looking charts and graphs. It builds on top of another tool (Matplotlib) to make visualizations prettier and easier to create.
+
+  -   **Matplotlib** (`import matplotlib.pyplot as plt` and `import matplotlib`):  
+  This is a library for creating plots and charts in Python. Think of it like drawing tools that help us visualize data.
+
+  -   **NumPy** (`import numpy as np`):  
+  NumPy is used for handling numbers and calculations in a more efficient way. It’s great for working with large groups of numbers, especially in math-heavy tasks.
+
+  -   **Scikit-Learn** (`from sklearn.model_selection import train_test_split`):  
+  This is a popular library for machine learning. It helps split data into training and testing parts, which is a key step in training predictive models.
+
+2. **Setting Up Warnings:**
+
+   ```python
+   import warnings
+   warnings.simplefilter("ignore")
+
+
+3. **Printing Version Information:**
+
+   ```python
+   print("Pandas version:", pd.__version__)
+   print("Seaborn version:", sns.__version__)
+   print("Matplotlib version:", matplotlib.__version__)
+   print("NumPy version:", np.__version__)
+
+These lines display the versions of each library in use, which helps in keeping track of the exact setup, since different versions might have small differences in functionality.
