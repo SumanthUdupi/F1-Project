@@ -268,3 +268,63 @@ These lines display the versions of each library in use, which helps in keeping 
       print("Constructor Position Matrix (Rows: raceId, Columns: Constructor Name):")
       print(constructor_position_matrix)
 ---
+
+3. **Sum of Points by Driver**
+   - **Goal**: Calculate the total `points` each driver has scored across all races using the `results_df` table.
+   - **Hint**: Group by `driverId` and use aggregation to sum the `points`.
+
+   **_Solution:_**Summing Points Scored by Each Driver
+
+      **_Steps :_**
+
+   1. **Merge Driver Details with Results**
+      ```python
+      merged_df = results_df.merge(drivers_df[['driverId', 'forename', 'surname']], on='driverId', how='left')
+      ```
+      - **Purpose:** Combine race results (`results_df`) with driver details (`drivers_df`) to include the driver's first and last names alongside race data.
+      - **Key Points:**
+      - `on='driverId'`: The `driverId` column is used as the key for merging the two datasets.
+      - `how='left'`: Ensures all rows from `results_df` are retained, even if a matching driver isn't found in `drivers_df`. Missing names will appear as `NaN`.
+
+   2. **Create a Full Driver Name**
+      ```python
+      merged_df['driver_name'] = merged_df['forename'] + ' ' + merged_df['surname']
+      ```
+      - **Purpose:** Combine the `forename` and `surname` columns into a single column, `driver_name`, for easier readability and grouping.
+      - **Result:** A new column, `driver_name`, is added to `merged_df`, containing the full name of each driver.
+
+   3. **Calculate Total Points by Driver**
+      ```python
+      total_driver_points = merged_df.groupby('driver_name')['points'].sum().reset_index()
+      ```
+      - **Purpose:** Group the dataset by `driver_name` and calculate the total points scored by each driver across all races.
+      - **Steps:**
+      - `groupby('driver_name')`: Groups rows by each driver's name.
+      - `['points'].sum()`: Sums the `points` column for each group (driver).
+      - `reset_index()`: Converts the grouped result back into a DataFrame for easier manipulation.
+
+   4. **Rename the Points Column**
+      ```python
+      total_driver_points.rename(columns={'points': 'total_points'}, inplace=True)
+      ```
+      - **Purpose:** Rename the `points` column in `total_driver_points` to `total_points` for clarity.
+      - **Key Argument:**
+      - `inplace=True`: Ensures the renaming happens directly on the `total_driver_points` DataFrame.
+
+   5. **Sort Drivers by Total Points**
+      ```python
+      total_driver_points = total_driver_points.sort_values(by='total_points', ascending=False)
+      ```
+      - **Purpose:** Sort the drivers in descending order of their total points.
+      - **Key Points:**
+      - `by='total_points'`: Specifies the column used for sorting.
+      - `ascending=False`: Ensures the drivers with the highest points appear first.
+
+   6. Display the Results
+      ```python
+      print("Total Points Scored by Each Driver:")
+      print(total_driver_points)
+      ```
+      - **Purpose:** Print the final `total_driver_points` DataFrame, showing each driver's name and their total points in descending order.
+
+   ---
