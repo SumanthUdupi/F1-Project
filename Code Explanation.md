@@ -320,7 +320,7 @@ These lines display the versions of each library in use, which helps in keeping 
       - `by='total_points'`: Specifies the column used for sorting.
       - `ascending=False`: Ensures the drivers with the highest points appear first.
 
-   6. Display the Results
+   6. **Display the Results**
       ```python
       print("Total Points Scored by Each Driver:")
       print(total_driver_points)
@@ -328,3 +328,73 @@ These lines display the versions of each library in use, which helps in keeping 
       - **Purpose:** Print the final `total_driver_points` DataFrame, showing each driver's name and their total points in descending order.
 
    ---
+
+4. **Eigenvalues of a Points Matrix**
+   - **Goal**: Construct a 2x2 matrix of points scored by two constructors in two races from `constructor_results_df` and compute its eigenvalues.
+   - **Hint**: Choose two specific `constructorId`s and `raceId`s for simplicity.
+
+**_Solution:_** Analyzing Constructor Points and Eigenvalues
+
+This code calculates a matrix of points scored by two constructors in two races and computes the eigenvalues of that matrix. It uses the `constructor_results_df` DataFrame to derive the points.
+
+**_Steps:_**
+
+   1. **Group Data by Constructor and Race**:
+   - The data is grouped by `constructorId` and `raceId`, and the total points scored by each constructor in each race are calculated.
+
+      ```python
+      selected_data = constructor_results_df.groupby(['constructorId', 'raceId'])['points'].sum().reset_index()
+
+   2. **Select Two Constructors and Two Races**:
+   - Two constructors and two races are chosen for simplicity and analysis.
+
+      ```python
+      constructors = selected_data['constructorId'].unique()[:2]
+      races = selected_data['raceId'].unique()[:2]
+   
+   3. **Construct the Points Matrix**:
+
+   - A 2x2 matrix is created where each cell contains the points scored by a specific constructor in a specific race. If no points are available for a combination, it is set to 0.
+
+      ```python
+         points_matrix = np.zeros((2, 2))
+         for i, constructor in enumerate(constructors):
+            for j, race in enumerate(races):
+               points = selected_data[
+                     (selected_data['constructorId'] == constructor) & 
+                     (selected_data['raceId'] == race)
+               ]['points']
+               points_matrix[i, j] = points.values[0] if not points.empty else 0
+
+   4. **Compute Eigenvalues**:
+
+   - The eigenvalues of the points matrix are calculated using NumPy's eigvals function. These eigenvalues provide mathematical insights into the matrix.
+         ```python
+         eigenvalues = np.linalg.eigvals(points_matrix)
+
+   5. **Print the Results**:
+
+   - The constructed points matrix and its eigenvalues are displayed.
+         ```python
+         print("Points Matrix:")
+         print(points_matrix)
+         print("\nEigenvalues:")
+         print(eigenvalues)
+
+**_Explanation of the Output:_**
+   
+   **Points Matrix**:
+   - The matrix represents the points scored by two constructors in two races.
+   - Each row is a race, and each column is a constructor.
+   - Example:
+   - Constructor 1 scored **0 points** in Race 1 and **1 point** in Race 2.
+   - Constructor 2 scored **0 points** in Race 1 and **4 points** in Race 2.
+
+   **Eigenvalues**:
+   - Eigenvalues summarize the matrix's characteristics.
+   - For this matrix:
+   - **0** means there’s no contribution from Constructor 1 in Race 1.
+   - **4** reflects Constructor 2’s dominant score in Race 2.
+
+   It helps quickly see which constructor performed better overall.
+
