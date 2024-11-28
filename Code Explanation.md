@@ -369,13 +369,15 @@ This code calculates a matrix of points scored by two constructors in two races 
    4. **Compute Eigenvalues**:
 
    - The eigenvalues of the points matrix are calculated using NumPy's eigvals function. These eigenvalues provide mathematical insights into the matrix.
-         ```python
+         
+      ```python
          eigenvalues = np.linalg.eigvals(points_matrix)
 
    5. **Print the Results**:
 
    - The constructed points matrix and its eigenvalues are displayed.
-         ```python
+   
+      ```python
          print("Points Matrix:")
          print(points_matrix)
          print("\nEigenvalues:")
