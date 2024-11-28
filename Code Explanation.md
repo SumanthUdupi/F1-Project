@@ -444,3 +444,379 @@ This code calculates a matrix of points scored by two constructors in two races 
      - `.tail()`: Shows the last few rows of the DataFrame to verify results.
 
 ---
+6. **Total Pit Stop Duration Over Time**
+
+   - **Goal**: Calculate the total pit stop `duration` for a `driverId` over the course of a race, analyzing how pit stop duration changes across `laps` in `pit_stops_df`.
+
+   - **Hint**: Use the cumulative sum and analyze derivatives of cumulative times to find patterns.
+
+**_Solution:_** Calculating Total Pit Stop Duration and Changes Across Laps
+
+**_Steps:_**
+
+1. **Convert Duration to Numeric Values**
+   ```python
+   pit_stops_df['duration'] = pd.to_numeric(pit_stops_df['duration'], errors='coerce')
+   ```
+   - **Purpose:** Ensure the `duration` column is in a numeric format to perform arithmetic operations.
+   - **Key Points:**
+     - `pd.to_numeric()`: Converts `duration` to a numeric data type. If any value cannot be converted, it will be set as `NaN` (due to `errors='coerce'`).
+
+2. **Calculate Cumulative Duration for Each Driver in Each Race**
+   ```python
+   pit_stops_df['cumulative_duration'] = pit_stops_df.groupby(['driverId', 'raceId'])['duration'].cumsum()
+   ```
+   - **Purpose:** Calculate the cumulative pit stop duration for each `driverId` in each race (`raceId`), showing how the total duration builds up lap by lap.
+   - **Steps:**
+     - `groupby(['driverId', 'raceId'])`: Groups the data by `driverId` and `raceId` so that the cumulative sum is computed separately for each driver in each race.
+     - `['duration'].cumsum()`: Computes the cumulative sum of pit stop durations for each group.
+
+3. **Calculate Change in Cumulative Duration Between Successive Laps**
+   ```python
+   pit_stops_df['duration_change'] = pit_stops_df.groupby(['driverId', 'raceId'])['cumulative_duration'].diff()
+   ```
+   - **Purpose:** Calculate the change in cumulative pit stop duration between successive laps for each driver.
+   - **Key Points:**
+     - `groupby(['driverId', 'raceId'])`: Groups by both `driverId` and `raceId` to calculate differences within each race and driver.
+     - `['cumulative_duration'].diff()`: Computes the difference in cumulative duration between successive laps (representing the additional time spent in each pit stop).
+
+4. **Display Relevant Data**
+   ```python
+   print("Pit stop analysis (total and change in duration across laps):")
+   print(pit_stops_df[['driverId', 'raceId', 'lap', 'duration', 'cumulative_duration', 'duration_change']].tail())
+   ```
+   - **Purpose:** Display the relevant columns to understand the pit stop duration and changes over time for each driver.
+   - **Key Points:**
+     - `[['driverId', 'raceId', 'lap', 'duration', 'cumulative_duration', 'duration_change']]`: Selects only the necessary columns to display.
+     - `.tail()`: Shows the last few rows of the DataFrame to verify the results.
+
+---
+7. **Optimization of Fastest Lap Speed**
+
+   - **Goal**: Identify the `fastestLapSpeed` from `results_df` for each `driverId` and find the lap where they achieved it to determine the race's optimal lap.
+
+   - **Hint**
+      - Use `groupby()` to group the data by `driverId` and apply the `max()` function to isolate the fastest lap speeds.
+      - Utilize `idxmax()` to retrieve the row with the maximum lap speed for each driver.
+
+**_Solution:_** Identifying the Fastest Lap Speed for Each Driver
+
+**_Steps:_**
+
+1. **Filter Out Invalid Fastest Lap Data**
+   ```python
+   valid_results_df = results_df.dropna(subset=['fastestLapSpeed'])
+   ```
+   - **Purpose:** Remove rows where the `fastestLapSpeed` is `NaN`, as these rows do not contain valid lap speed data.
+   - **Key Points:**
+     - `dropna(subset=['fastestLapSpeed'])`: Filters out rows where `fastestLapSpeed` is missing to ensure calculations are done only on valid data.
+
+2. **Group by Driver and Identify Fastest Lap Speed**
+   ```python
+   fastest_lap = valid_results_df.groupby('driverId').apply(
+       lambda x: x.loc[x['fastestLapSpeed'].idxmax(), ['raceId', 'fastestLap', 'fastestLapSpeed']]
+   ).reset_index(drop=True)
+   ```
+   - **Purpose:** Group the dataset by `driverId` and apply a function to find the lap with the highest `fastestLapSpeed` for each driver.
+   - **Steps:**
+     - `groupby('driverId')`: Groups the data by `driverId`, ensuring the calculation is done per driver.
+     - `apply(lambda x: ...)`: For each driver, a lambda function is used to find the row with the maximum `fastestLapSpeed`.
+     - `idxmax()`: Returns the index of the row with the maximum `fastestLapSpeed`.
+     - `.loc[]`: Selects the specific row corresponding to the maximum lap speed and extracts relevant columns (`raceId`, `fastestLap`, `fastestLapSpeed`).
+   - **Result:** A DataFrame `fastest_lap` containing each driver's fastest lap details (race, lap, and speed).
+
+3. **Rename Columns for Better Readability**
+   ```python
+   fastest_lap.rename(columns={'raceId': 'Race ID', 'fastestLap': 'Fastest Lap', 'fastestLapSpeed': 'Fastest Speed'}, inplace=True)
+   ```
+   - **Purpose:** Rename the columns for improved clarity and better presentation of the final results.
+   - **Key Points:**
+     - `inplace=True`: Ensures the column renaming happens directly on the `fastest_lap` DataFrame without needing to assign it to a new variable.
+
+4. **Display the Results**
+   ```python
+   print("Fastest Lap Speed for Each Driver and Corresponding Lap:")
+   print(fastest_lap)
+   ```
+   - **Purpose:** Print the final `fastest_lap` DataFrame, displaying each driver's fastest lap, the corresponding lap number, and the speed achieved.
+   - **Key Points:**
+     - `fastest_lap`: The DataFrame contains the desired results, showing which lap was the fastest and the corresponding speed for each driver.
+
+---
+## Probability Fundamentals Exercises
+8. **Probability of a Constructor Winning**
+
+   - **Goal**: Calculate the probability of a specific `constructorId` having the highest `position` (winning) across all races in the `results_df` table.
+
+   - **Hint**
+      - Filter for rows where `positionOrder` is 1 (indicating a win), count the occurrences for each `constructorId`, and divide by the total number of races to compute the win probability.
+
+**_Solution:_** Calculating the Probability of a Constructor Winning
+
+**_Steps:_**
+
+1. **Filter for Winning Constructors**
+   ```python
+   winners_df = results_df[results_df['positionOrder'] == 1]
+   ```
+   - **Purpose:** Filter the `results_df` table to only include rows where the `positionOrder` is 1, which indicates a win.
+   - **Key Points:**
+     - `positionOrder == 1`: Selects the races where the constructor finished in first place.
+
+2. **Count the Number of Wins for Each Constructor**
+   ```python
+   win_counts = winners_df['constructorId'].value_counts()
+   ```
+   - **Purpose:** Count the number of wins for each `constructorId` by calculating the occurrences of each constructor in the filtered `winners_df` DataFrame.
+   - **Key Points:**
+     - `value_counts()`: Returns the count of unique values (constructorId) in the `winners_df`.
+
+3. **Calculate the Total Number of Races**
+   ```python
+   total_races = results_df['raceId'].nunique()
+   ```
+   - **Purpose:** Calculate the total number of unique races in the dataset.
+   - **Key Points:**
+     - `nunique()`: Counts the number of unique values in the `raceId` column, which corresponds to the total number of races.
+
+4. **Calculate the Probability of Winning for Each Constructor**
+   ```python
+   win_probabilities = (win_counts / total_races).reset_index()
+   win_probabilities.columns = ['constructorId', 'Win Probability']
+   ```
+   - **Purpose:** Calculate the probability of each constructor winning by dividing the number of wins by the total number of races.
+   - **Steps:**
+     - `win_counts / total_races`: Calculates the win probability for each constructor.
+     - `.reset_index()`: Converts the `value_counts` result into a DataFrame.
+     - Renames the columns to `constructorId` and `Win Probability`.
+
+5. **Merge Constructor Names**
+   ```python
+   win_probabilities = win_probabilities.merge(
+       constructors_df[['constructorId', 'name']],
+       on='constructorId',
+       how='left'
+   )
+   ```
+   - **Purpose:** Merge the `win_probabilities` DataFrame with the `constructors_df` to get the names of the constructors.
+   - **Key Points:**
+     - `merge()`: Merges the win probabilities with constructor names by matching `constructorId`.
+     - `how='left'`: Ensures all constructors in `win_probabilities` are kept, even if there is no match in `constructors_df`.
+
+6. **Select Relevant Columns and Rename**
+   ```python
+   win_probabilities = win_probabilities[['constructorId', 'name', 'Win Probability']]
+   win_probabilities.rename(columns={'name': 'Constructor Name'}, inplace=True)
+   ```
+   - **Purpose:** Select the relevant columns (`constructorId`, `Constructor Name`, and `Win Probability`) and rename the `name` column for better readability.
+   - **Key Points:**
+     - `rename(columns={'name': 'Constructor Name'})`: Changes the column name for clarity.
+
+7. **Display the Results**
+   ```python
+   print("Winning Probabilities for Each Constructor:")
+   print(win_probabilities)
+   ```
+   - **Purpose:** Print the final `win_probabilities` DataFrame, which contains each constructor's name and their probability of winning.
+   - **Key Points:**
+     - `win_probabilities`: Displays the calculated win probabilities for each constructor.
+
+---
+9. **Conditional Probability of Qualifying Position**
+
+   - **Goal**: Calculate the probability that a `driverId` qualifies in the top 3 (`position` <= 3) given that they participated in qualifying, using data from `qualifying_df`.
+
+   - **Hint**
+      - Calculate the proportion of qualifying entries where the `position` is less than or equal to 3 for each driver.
+
+**_Solution:_** Calculating Conditional Probability of Qualifying in the Top 3
+
+**_Steps:_**
+
+1. **Filter Qualifying Data for Top 3 Positions**
+   ```python
+   top_3_qualifying = qualifying_df[qualifying_df['position'] <= 3]
+   ```
+   - **Purpose:** Filter the `qualifying_df` to only include entries where the driver qualified in one of the top 3 positions (`position <= 3`).
+   - **Key Points:**
+     - `position <= 3`: Selects only the rows where the driver's qualifying position is in the top 3.
+
+2. **Count the Total Number of Qualifying Entries for Each Driver**
+   ```python
+   total_qualifying_entries = qualifying_df.groupby('driverId').size()
+   ```
+   - **Purpose:** Count the total number of qualifying entries for each `driverId` (i.e., the number of races a driver participated in qualifying).
+   - **Key Points:**
+     - `groupby('driverId')`: Groups the data by `driverId` so we can count entries per driver.
+     - `size()`: Returns the number of qualifying entries per driver.
+
+3. **Count the Number of Top 3 Qualifying Entries for Each Driver**
+   ```python
+   top_3_qualifying_entries = top_3_qualifying.groupby('driverId').size()
+   ```
+   - **Purpose:** Count how many times each driver qualified in the top 3 positions.
+   - **Key Points:**
+     - This operation is performed on the filtered `top_3_qualifying` DataFrame to count the entries where the driver finished in the top 3.
+
+4. **Calculate the Probability of Qualifying in the Top 3**
+   ```python
+   qualifying_probabilities = (top_3_qualifying_entries / total_qualifying_entries).reset_index(name='Top 3 Probability')
+   ```
+   - **Purpose:** Calculate the conditional probability for each driver by dividing the number of top 3 qualifying entries by the total number of qualifying entries for that driver.
+   - **Key Points:**
+     - `top_3_qualifying_entries / total_qualifying_entries`: The fraction of top 3 finishes for each driver.
+     - `.reset_index(name='Top 3 Probability')`: Converts the result into a DataFrame with the `Top 3 Probability` column.
+
+5. **Merge with Driver Names for Readability (Optional)**
+   ```python
+   qualifying_probabilities = qualifying_probabilities.merge(
+       drivers_df[['driverId', 'forename', 'surname']],
+       on='driverId',
+       how='left'
+   )
+   ```
+   - **Purpose:** Merge the `qualifying_probabilities` DataFrame with the `drivers_df` to add the driver names (forename and surname).
+   - **Key Points:**
+     - `merge()`: Joins the two DataFrames based on `driverId` to associate the driver names with their probabilities.
+
+6. **Create Full Driver Name**
+   ```python
+   qualifying_probabilities['Driver Name'] = qualifying_probabilities['forename'] + ' ' + qualifying_probabilities['surname']
+   ```
+   - **Purpose:** Combine the `forename` and `surname` columns into a single `Driver Name` column for easier reference.
+   - **Key Points:**
+     - Concatenates the first and last names to create a full name.
+
+7. **Reorganize Columns**
+   ```python
+   qualifying_probabilities = qualifying_probabilities[['driverId', 'Driver Name', 'Top 3 Probability']]
+   ```
+   - **Purpose:** Select only the relevant columns (`driverId`, `Driver Name`, and `Top 3 Probability`) for the final output.
+
+8. **Sort by Top 3 Probability**
+   ```python
+   qualifying_probabilities_sorted = qualifying_probabilities.sort_values(by='Top 3 Probability', ascending=False)
+   ```
+   - **Purpose:** Sort the drivers based on their `Top 3 Probability` in descending order to display the drivers with the highest probabilities first.
+
+9. **Display the Results**
+   ```python
+   print("Top 3 Qualifying Probabilities for Each Driver (Sorted Descending):")
+   print(qualifying_probabilities_sorted)
+   ```
+   - **Purpose:** Print the final DataFrame showing the driver names and their probabilities of qualifying in the top 3.
+   - **Key Points:**
+     - The result is sorted in descending order, making it easy to identify drivers with the highest probabilities.
+
+---
+## Statistics Basics
+
+1. **Driver Performance Analysis:**
+
+    - **Goal:** Analyze the performance of drivers based on their race results and standings.
+
+    - **Tables Involved:** 
+        - `results_df`
+        - `drivers_df`
+        - `driver_standings_df`
+
+    - **Tasks:**
+        - Find the total number of wins and podium finishes (top 3) for each driver.
+        - Calculate the average position and points across all races for each driver.
+
+**_Solution:_** Driver Performance Analysis
+
+**_Steps:_**
+
+1. **Convert 'position' column to numeric:**
+    ```python
+    results_df['position'] = pd.to_numeric(results_df['position'], errors='coerce')
+    ```
+    - **Purpose:** Convert the `position` column to a numeric format.
+    - **Explanation:** Ensures that the `position` column can be used for numerical operations like comparison (`<= 3`). Any invalid values (e.g., text) are replaced with `NaN`.
+
+2. **Calculate total wins for each driver:**
+    ```python
+    total_wins = results_df[results_df['position'] == 1].groupby('driverId').size()
+    ```
+    - **Purpose:** Find the total number of wins (1st-place finishes) for each driver.
+    - **Explanation:** Filters the rows where `position` is 1 (indicating a win) and groups the data by `driverId` to count the occurrences (number of wins).
+
+3. **Calculate podium finishes for each driver:**
+    ```python
+    podium_finishes = results_df[results_df['position'] <= 3].groupby('driverId').size()
+    ```
+    - **Purpose:** Calculate the total number of podium finishes (1st, 2nd, or 3rd) for each driver.
+    - **Explanation:** Filters for rows where `position` is less than or equal to 3 (top 3 finishes) and counts the number of podium finishes for each driver.
+
+4. **Calculate average position for each driver:**
+    ```python
+    average_position = results_df.groupby('driverId')['position'].mean()
+    ```
+    - **Purpose:** Calculate the average finishing position for each driver.
+    - **Explanation:** Groups the data by `driverId` and computes the mean position. A lower average position indicates better overall performance.
+
+5. **Calculate average points for each driver:**
+    ```python
+    average_points = results_df.groupby('driverId')['points'].mean()
+    ```
+    - **Purpose:** Calculate the average points earned by each driver.
+    - **Explanation:** Groups the data by `driverId` and computes the average number of points. Points are generally awarded based on the finishing position in a race.
+
+6. **Calculate the variance of position for each driver:**
+    ```python
+    position_variance = results_df.groupby('driverId')['position'].var()
+    ```
+    - **Purpose:** Calculate the variance of finishing positions for each driver.
+    - **Explanation:** Variance measures how consistent a driver is in their race finishes. Lower variance indicates more consistency.
+
+7. **Combine the performance metrics into a new DataFrame:**
+    ```python
+    performance_metrics = pd.DataFrame({
+        'Wins': total_wins,
+        'Podium Finishes': podium_finishes,
+        'Avg Position': average_position,
+        'Avg Points': average_points,
+        'Position Variance': position_variance
+    }).reset_index()
+    ```
+    - **Purpose:** Create a DataFrame with all the calculated performance metrics for each driver.
+    - **Explanation:** Combines all the performance metrics (wins, podium finishes, etc.) into a single DataFrame, and resets the index so that `driverId` is a column instead of the index.
+
+8. **Merge the performance metrics with driver details:**
+    ```python
+    driver_performance = performance_metrics.merge(drivers_df[['driverId', 'forename', 'surname']],
+                                                on='driverId', how='left')
+    ```
+    - **Purpose:** Merge the `performance_metrics` DataFrame with `drivers_df` to add the driver's first and last names.
+    - **Explanation:** This merge ensures that the final DataFrame contains both the driver's performance metrics and their name, based on `driverId`.
+
+9. **Display the final result:**
+    ```python
+    print(driver_performance)
+    ```
+    - **Purpose:** Display the `driver_performance` DataFrame.
+    - **Explanation:** This prints the final DataFrame, showing the performance metrics for each driver, along with their first and last names.
+
+**Result:**
+The `driver_performance` DataFrame will include the following columns:
+- **driverId**: The unique ID of each driver.
+- **Wins**: The total number of 1st-place finishes.
+- **Podium Finishes**: The total number of top 3 finishes (1st, 2nd, or 3rd).
+- **Avg Position**: The average finishing position across all races.
+- **Avg Points**: The average number of points earned by the driver.
+- **Position Variance**: The variance in the driver's finishing positions (lower is more consistent).
+- **forename**: The first name of the driver.
+- **surname**: The last name of the driver.
+
+The output will display the performance metrics for each driver.
+
+**Identifying the Most Consistent Drivers:**
+To identify the drivers with the most consistent performance (low position variance), sort the DataFrame by `Position Variance`:
+```python
+consistent_drivers = driver_performance.sort_values(by='Position Variance').reset_index(drop=True)
+print("Most Consistent Drivers (Low Position Variance):")
+print(consistent_drivers)
+```
+- **Purpose:** Sorts the drivers by the variance in their finishing positions, with the most consistent drivers (low variance) appearing at the top.
+---
