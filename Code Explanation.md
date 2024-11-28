@@ -376,7 +376,7 @@ This code calculates a matrix of points scored by two constructors in two races 
    5. **Print the Results**:
 
    - The constructed points matrix and its eigenvalues are displayed.
-   
+
       ```python
          print("Points Matrix:")
          print(points_matrix)
@@ -399,4 +399,4 @@ This code calculates a matrix of points scored by two constructors in two races 
    - **4** reflects Constructor 2’s dominant score in Race 2.
 
    It helps quickly see which constructor performed better overall.
-
+---
