@@ -273,7 +273,7 @@ These lines display the versions of each library in use, which helps in keeping 
    - **Goal**: Calculate the total `points` each driver has scored across all races using the `results_df` table.
    - **Hint**: Group by `driverId` and use aggregation to sum the `points`.
 
-   **_Solution:_**Summing Points Scored by Each Driver
+   **_Solution:_** Summing Points Scored by Each Driver
 
       **_Steps :_**
 
