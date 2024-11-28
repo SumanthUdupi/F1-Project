@@ -397,8 +397,6 @@ This code calculates a matrix of points scored by two constructors in two races 
    - For this matrix:
    - **0** means there’s no contribution from Constructor 1 in Race 1.
    - **4** reflects Constructor 2’s dominant score in Race 2.
-
-   It helps quickly see which constructor performed better overall.
 ---
 ## Calculus Exercises
 
