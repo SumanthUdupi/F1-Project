@@ -400,3 +400,47 @@ This code calculates a matrix of points scored by two constructors in two races 
 
    It helps quickly see which constructor performed better overall.
 ---
+## Calculus Exercises
+
+5. **Rate of Change in Lap Time**
+
+   - **Goal**: Determine the rate of change in lap times for a given `driverId` by analyzing successive lap times in the `lap_times_df` table.
+
+   - **Hint**
+      - Use `sort_values()` to order the data by `driverId` and `lap` for proper calculation.
+      - Use `diff()` to compute the time difference between consecutive laps within each driver's lap records.
+
+**_Solution:_** Calculating Lap Time Change for Each Driver
+
+**_Steps:_**
+
+1. **Sort Lap Time Data**
+   ```python
+   lap_times_df = lap_times_df.sort_values(by=['driverId', 'lap'])
+   ```
+   - **Purpose:** Ensure the data is ordered by `driverId` and `lap` so that successive laps are properly aligned for computation.
+   - **Key Points:**
+     - Sorting is crucial for the `diff()` function to work as intended.
+     - `by=['driverId', 'lap']`: Sorts data first by `driverId` and then by `lap` number.
+
+2. **Calculate Rate of Change in Lap Times**
+   ```python
+   lap_times_df['lap_time_change'] = lap_times_df.groupby('driverId')['milliseconds'].diff()
+   ```
+   - **Purpose:** Compute the difference in lap times (`milliseconds`) for consecutive laps within each `driverId`.
+   - **Steps:**
+     - `groupby('driverId')`: Groups data by `driverId` so each driver's laps are processed independently.
+     - `['milliseconds'].diff()`: Calculates the difference in lap times between consecutive laps.
+   - **Result:** A new column, `lap_time_change`, is added to the DataFrame, indicating the change in lap time for each driver.
+
+3. **Display Relevant Data**
+   ```python
+   print("Rate of change of lap times for each driver:")
+   print(lap_times_df[['driverId', 'lap', 'milliseconds', 'lap_time_change']].tail())
+   ```
+   - **Purpose:** Display the relevant columns to understand the lap time changes for each driver.
+   - **Key Points:**
+     - `[['driverId', 'lap', 'milliseconds', 'lap_time_change']]`: Selects only the necessary columns for display.
+     - `.tail()`: Shows the last few rows of the DataFrame to verify results.
+
+---
