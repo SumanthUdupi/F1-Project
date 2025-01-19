@@ -151,32 +151,37 @@ This table of contents organizes the F1 data analysis project concepts into a st
 
 * **pandas**: Used for data manipulation and analysis. Helps in organizing tabular data (like Excel sheets).
 * **numpy**: Useful for working with numerical data and performing mathematical operations.
-requests: Allows fetching data from the internet via APIs (like getting live data).
-os: Helps interact with the system’s file structure (e.g., checking files or creating directories).
-Visualization Libraries:
+* **requests**: Allows fetching data from the internet via APIs (like getting live data).
+* **os**: Helps interact with the system’s file structure (e.g., checking files or creating directories).
 
-matplotlib.pyplot: Creates static charts like line graphs and bar charts.
-seaborn: Built on top of Matplotlib for more visually appealing charts with simpler syntax.
-plotly.express, plotly.graph_objects, plotly.figure_factory: Create highly interactive, customizable visualizations.
-Geospatial Libraries:
+2. **Visualization Libraries:**
 
-folium: Creates interactive maps with data points (e.g., plotting locations).
-geopandas: Extends pandas to handle geographical data (e.g., shapes of countries).
-Interactive Dashboards:
+* **matplotlib.pyplot**: Creates static charts like line graphs and bar charts.
+* **seaborn**: Built on top of Matplotlib for more visually appealing charts with simpler syntax.
+* **plotly.express, plotly.graph_objects, plotly.figure_factory**: Create highly interactive, customizable visualizations.
 
-dash: A framework to build interactive web-based dashboards.
-dash_core_components, dash_html_components: Provide components (like dropdowns, buttons, graphs) for Dash apps.
-Input, Output: Used for connecting interactive components in Dash (e.g., clicking a button changes a graph).
-Network Graphs:
+3. **Geospatial Libraries:**
 
-networkx: Handles network-related data like social connections or graph structures.
-Streamlit:
+* **folium**: Creates interactive maps with data points (e.g., plotting locations).
+* **geopandas**: Extends pandas to handle geographical data (e.g., shapes of countries).
 
-Simplifies the creation of interactive apps for data visualization or analytics.
-Code Explanation:
-print(plt.style.available): Lists all available styles for Matplotlib charts (e.g., "ggplot," "seaborn," etc.).
-plt.style.use('ggplot'): Sets the chart style to look like "ggplot" (clean, grid-based visuals).
-sns.set(style='darkgrid'): Configures Seaborn to use a dark grid background for its charts.
-Plotly Configuration:
-plotly.io: Handles how Plotly renders charts.
-pio.renderers.default = 'notebook': Ensures Plotly visualizations work smoothly inside Jupyter Notebook.
+4. **Interactive Dashboards:**
+
+* **dash**: A framework to build interactive web-based dashboards.
+* **dash_core_components, dash_html_components**: Provide components (like dropdowns, buttons, graphs) for Dash apps.
+* **Input, Output**: Used for connecting interactive components in Dash (e.g., clicking a button changes a graph).
+
+5. **Network Graphs:**
+
+* **networkx**: Handles network-related data like social connections or graph structures.
+
+6. **Streamlit:** Simplifies the creation of interactive apps for data visualization or analytics.
+
+7. **Code Explanation:**
+
+* **print(plt.style.available)**: Lists all available styles for Matplotlib charts (e.g., "ggplot," "seaborn," etc.).
+* **plt.style.use('ggplot')**: Sets the chart style to look like "ggplot" (clean, grid-based visuals).
+* **sns.set(style='darkgrid')**: Configures Seaborn to use a dark grid background for its charts.
+**Plotly Configuration:**
+    * **plotly.io**: Handles how Plotly renders charts.
+    * **pio.renderers.default = 'notebook'**: Ensures Plotly visualizations work smoothly inside Jupyter Notebook.
